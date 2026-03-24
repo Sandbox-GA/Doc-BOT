@@ -215,14 +215,14 @@ def build_reply(doc_info: dict, has_file: bool = False) -> str:
         return (
             f"*📭 '{query}' 관련 문서는 현재 자료실에 없습니다.*\n\n"
             f"👉 <{LIBRARY_URL}|🏠 샌드박스 문서 자료실>\n\n"
-            f"📮 자료실에 없는 경우 GA팀에 문의해 주세요!"
+            f"🙋 자료실에 없는 경우 GA팀에 문의해 주세요!"
         )
 
     if doc_info["name"] == "자료실_없음":
         return (
             f"*📭 요청하신 문서를 자료실에서 찾지 못했습니다.*\n\n"
             f"👉 <{doc_info['notion_url']}|🏠 샌드박스 문서 자료실>\n\n"
-            f"📮 자료실에 없는 경우 GA팀에 문의해 주세요!"
+            f"🙋 자료실에 없는 경우 GA팀에 문의해 주세요!"
         )
 
     if doc_info.get("is_group"):
