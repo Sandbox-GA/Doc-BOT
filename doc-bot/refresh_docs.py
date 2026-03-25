@@ -192,6 +192,12 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             if ext in VALID_EXTENSIONS:
                 local_file = safe_filename(doc_name, notion_fname)
 
+        # 실물 파일 없으면 건너뜀 (가이드, URL 전용 등)
+        if not local_file:
+            print(f"  ⏭  {doc_name}: 실물 파일 없음 — 건너뜀")
+            skipped += 1
+            continue
+
         # ── 신규 문서 추가 ──────────────────────────────────────────
         if page_id not in existing_ids:
             new_doc = {
@@ -245,7 +251,12 @@ def main():
     else:
         documents = []
 
+    # 실물 파일 없는 기존 항목 정리
+    before = len(documents)
+    documents = [d for d in documents if d.get("local_file")]
     existing_ids = {doc.get("notion_page_id", ""): i for i, doc in enumerate(documents)}
+    if before != len(documents):
+        print(f"🧹 URL 전용 기존 항목 {before - len(documents)}개 제거")
 
     print("=" * 55)
     print("Notion DB 동기화 시작")
