@@ -25,8 +25,8 @@ claude
 ## 2. 저장소 클론
 
 ```bash
-git clone https://github.com/taesup-ux/Sandbox-GA-Automation.git
-cd Sandbox-GA-Automation/doc-bot
+git clone https://github.com/Sandbox-GA/Doc-BOT.git
+cd Doc-BOT
 ```
 
 ---

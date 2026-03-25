@@ -338,7 +338,7 @@ test: [새 문서명] 보내주세요
 |------|------|
 | Notion 자료실 | https://www.notion.so/sandboxinc/30229436cbac81b8b88ef3bc1ab8fb7b |
 | Railway 대시보드 | https://railway.com |
-| GitHub 저장소 | https://github.com/taesup-ux/Sandbox-GA-Automation |
+| GitHub 저장소 | https://github.com/Sandbox-GA/Doc-BOT |
 
 ---
 
