@@ -99,6 +99,12 @@ def handle_message(message, client, logger):
     if not doc_list:
         return
 
+    # 파악 중 이모티콘
+    try:
+        client.reactions_add(channel=channel, timestamp=ts, name="thinking_face")
+    except Exception:
+        pass
+
     for doc_info in doc_list:
         is_group = doc_info.get("is_group", False)
         has_file = False if is_group else doc_request.has_local_file(doc_info)
