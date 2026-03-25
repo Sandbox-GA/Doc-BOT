@@ -256,7 +256,7 @@ def main():
     documents = [d for d in documents if d.get("local_file")]
     existing_ids = {doc.get("notion_page_id", ""): i for i, doc in enumerate(documents)}
     if before != len(documents):
-        print(f"🧹 URL 전용 기존 항목 {before - len(documents)}개 제거")
+        print(f"[정리] URL 전용 기존 항목 {before - len(documents)}개 제거")
 
     print("=" * 55)
     print("Notion DB 동기화 시작")
