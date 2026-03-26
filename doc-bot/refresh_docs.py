@@ -281,6 +281,33 @@ def main():
     print(f"📝 documents.json 업데이트 완료 ({len(documents)}개 항목)")
     print("=" * 55)
 
+    notify_slack(len(documents), total_added, total_updated, total_failed)
+
+
+def notify_slack(doc_count: int, added: int, updated: int, failed: int):
+    """리프레시 완료 알림을 Slack 채널에 전송."""
+    token = os.environ.get("DOC_BOT_TOKEN", "")
+    channel = os.environ.get("HELPDESK_CHANNEL", "")
+    if not token or not channel:
+        return
+    from datetime import datetime, timezone, timedelta
+    KST = timezone(timedelta(hours=9))
+    now_str = datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
+    msg = (
+        f"🔄 *문서 자료실 리프레시 완료* ({now_str})\n"
+        f"• 총 문서: {doc_count}개 | 신규: {added}개 | 갱신: {updated}개 | 실패: {failed}개\n"
+        f"• 상태: 최신 정본 업데이트 완료"
+    )
+    try:
+        requests.post(
+            "https://slack.com/api/chat.postMessage",
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            json={"channel": channel, "text": msg},
+            timeout=10,
+        )
+    except Exception:
+        pass
+
 
 if __name__ == "__main__":
     main()
