@@ -1,16 +1,14 @@
-# Sandbox Doc Bot - 문서 요청 자동 안내 봇
+# Sandbox Doc Bot - 문서 ?�청 ?�동 ?�내 �?#
+# ??��: Slack ?�프?�스??채널?�서 문서/?�류 ?�청 ?�워?��? 감�???#       Notion ?�료??링크 ?�는 로컬 ?�일???�레?�로 바로 ?�송.
 #
-# 역할: Slack 헬프데스크 채널에서 문서/서류 요청 키워드를 감지해
-#       Notion 자료실 링크 또는 로컬 파일을 스레드로 바로 전송.
+# Claude API ?�음 ???�수 ?�워??매칭?�로 ?�작 (빠르�?가벼�?)
 #
-# Claude API 없음 — 순수 키워드 매칭으로 동작 (빠르고 가벼움)
-#
-# 실행: python main.py
-# 사전 조건:
-#   1. api.slack.com/apps 에서 Doc Bot 앱 생성
-#   2. .env에 DOC_BOT_TOKEN, SLACK_SIGNING_SECRET 입력
-#   3. 헬프데스크 채널에 봇 초대: /invite @Sandbox Doc Bot
-#   4. python refresh_docs.py 실행 → 로컬 파일 캐시 생성 (선택)
+# ?�행: python main.py
+# ?�전 조건:
+#   1. api.slack.com/apps ?�서 Doc Bot ???�성
+#   2. .env??DOC_BOT_TOKEN, SLACK_SIGNING_SECRET ?�력
+#   3. ?�프?�스??채널??�?초�?: /invite @Sandbox Doc Bot
+#   4. python refresh_docs.py ?�행 ??로컬 ?�일 캐시 ?�성 (?�택)
 
 import logging
 import os
@@ -39,38 +37,44 @@ from config import (
 )
 import agents.doc_request_agent as doc_request
 
-# ─── Slack Bolt 앱 초기화 (HTTP 모드) ────────────────────────────────────────
+# ?�?�?� Slack Bolt ??초기??(HTTP 모드) ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 app = App(
     token=os.environ["DOC_BOT_TOKEN"],
     signing_secret=os.environ["SLACK_SIGNING_SECRET"],
 )
 
-# ─── 중복 처리 방지 (최근 1000건만 유지, O(1) 조회) ─────────────────────────
+# ?�?�?� 중복 처리 방�? (최근 1000건만 ?��?, O(1) 조회) ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 _processed_ts: OrderedDict = OrderedDict()
 _PROCESSED_MAX = 1000
 
 
-# ─── 유틸 함수 ────────────────────────────────────────────────────────────────
+# ?�?�?� ?�틸 ?�수 ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 def is_work_hours() -> bool:
     now = datetime.now(KST)
     return WORK_START <= now.hour < WORK_END
 
 
 def _is_excluded(text: str) -> bool:
-    """인감 등 물리 대응 필수 문의 — 봇 처리 제외."""
+    """?�감 ??물리 ?�???�수 문의 ??�?처리 ?�외."""
     return any(kw in text for kw in EXCLUDE_KEYWORDS)
 
 
-# ─── 이벤트: 메시지 핸들러 ────────────────────────────────────────────────────
-@app.message(re.compile(r".*"))
-def handle_message(message, client, logger):
+# ?�?�?� ?�벤?? 메시지 ?�들???�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+@app.event("message")
+def handle_message(event, client, logger):
+    message = event
+    # 삭제·수정·봇 메시지 등 처리 불필요한 subtype 제외
+    subtype = event.get("subtype", "")
+    if subtype in ("message_deleted", "message_changed", "bot_message",
+                   "channel_join", "channel_leave", "channel_topic"):
+        return
     channel = message.get("channel")
 
-    # ── 헬프데스크 채널만 이하 처리 ──────────────────────────────────────────
+    # ?�?� ?�프?�스??채널�??�하 처리 ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
     if channel != HELPDESK_CHANNEL:
         return
 
-    # 봇·시스템 메시지 제외
+    # 봇·시?�템 메시지 ?�외
     if message.get("bot_id"):
         return
 
@@ -88,23 +92,23 @@ def handle_message(message, client, logger):
         return
 
     if _is_excluded(text):
-        logger.info(f"[filter] 제외 키워드 감지, 스킵: ts={ts}")
+        logger.info(f"[filter] ?�외 ?�워??감�?, ?�킵: ts={ts}")
         return
 
     if not is_work_hours():
         return
 
-    # ── 문서 요청 감지 (다중) ─────────────────────────────────────────────────
+    # ?�?� 문서 ?�청 감�? (?�중) ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
     doc_list = doc_request.detect_document_requests(text)
     if not doc_list:
         return
 
-    # 감지 중 안내 메시지
+    # 감�? �??�내 메시지
     try:
         client.chat_postMessage(
             channel=HELPDESK_CHANNEL,
             thread_ts=thread_ts,
-            text="요청 접수했습니다! 서류 찾아드릴게요 🤔",
+            text="?�청 ?�수?�습?�다! ?�류 찾아?�릴게요 ?��",
         )
     except Exception:
         pass
@@ -125,14 +129,14 @@ def handle_message(message, client, logger):
                 doc_request.upload_local_file(client, HELPDESK_CHANNEL, thread_ts, doc_info)
             elif can_download:
                 doc_request.download_and_upload_url(client, HELPDESK_CHANNEL, thread_ts, doc_info)
-            logger.info(f"[doc_request] 답변 완료: {doc_info['name']}, ts={ts}")
+            logger.info(f"[doc_request] ?��? ?�료: {doc_info['name']}, ts={ts}")
         except Exception as e:
-            logger.error(f"[doc_request] 실패: {e}")
+            logger.error(f"[doc_request] ?�패: {e}")
 
 
-# ─── 시작 상태점검 ────────────────────────────────────────────────────────────
+# ?�?�?� ?�작 ?�태?��? ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 def startup_check() -> bool:
-    """봇 시작 전 필수 상태 점검. 실패 시 False 반환."""
+    """�??�작 ???�수 ?�태 ?��?. ?�패 ??False 반환."""
     import requests
     from pathlib import Path
 
@@ -140,28 +144,27 @@ def startup_check() -> bool:
     h = {"Authorization": f"Bearer {token}"}
     ok = True
 
-    print("── 상태점검 ──────────────────────────────────────")
+    print("?�?� ?�태?��? ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�")
 
-    # 1. 토큰 유효성
-    r = requests.post("https://slack.com/api/auth.test", headers=h, timeout=10)
+    # 1. ?�큰 ?�효??    r = requests.post("https://slack.com/api/auth.test", headers=h, timeout=10)
     d = r.json()
     if d.get("ok"):
-        print(f"  ✅ 토큰  : {d.get('user')} / {d.get('team')}")
+        print(f"  ???�큰  : {d.get('user')} / {d.get('team')}")
     else:
-        print(f"  ❌ 토큰 오류: {d.get('error')}")
+        print(f"  ???�큰 ?�류: {d.get('error')}")
         ok = False
 
-    # 2. 스코프 확인
+    # 2. ?�코???�인
     scopes = r.headers.get("X-OAuth-Scopes", "")
     required = {"chat:write", "files:write", "groups:history"}
     missing = required - set(s.strip() for s in scopes.split(","))
     if not missing:
-        print(f"  ✅ 스코프 : {scopes}")
+        print(f"  ???�코??: {scopes}")
     else:
-        print(f"  ❌ 스코프 누락: {missing}")
+        print(f"  ???�코???�락: {missing}")
         ok = False
 
-    # 3. 채널 포스팅 가능 여부
+    # 3. 채널 ?�스??가???��?
     r2 = requests.post(
         "https://slack.com/api/conversations.info",
         headers=h,
@@ -170,43 +173,43 @@ def startup_check() -> bool:
     )
     d2 = r2.json()
     if d2.get("ok") or d2.get("error") in ("missing_scope",):
-        print(f"  ✅ 채널   : {HELPDESK_CHANNEL}")
+        print(f"  ??채널   : {HELPDESK_CHANNEL}")
     elif d2.get("error") == "channel_not_found":
-        print(f"  ❌ 채널 없음: {HELPDESK_CHANNEL}")
+        print(f"  ??채널 ?�음: {HELPDESK_CHANNEL}")
         ok = False
     else:
-        print(f"  ✅ 채널   : {HELPDESK_CHANNEL} ({d2.get('error','ok')})")
+        print(f"  ??채널   : {HELPDESK_CHANNEL} ({d2.get('error','ok')})")
 
-    # 4. 로컬 파일 캐시 확인
+    # 4. 로컬 ?�일 캐시 ?�인
     files_dir = Path(__file__).parent / "knowledge" / "files"
     file_count = len(list(files_dir.glob("*"))) if files_dir.exists() else 0
     doc_count = len(doc_request._load_documents())
-    print(f"  ✅ 문서   : documents.json {doc_count}개 / 캐시 파일 {file_count}개")
+    print(f"  ??문서   : documents.json {doc_count}�?/ 캐시 ?�일 {file_count}�?)
 
-    # 5. Signing Secret 존재 확인
+    # 5. Signing Secret 존재 ?�인
     if os.environ.get("SLACK_SIGNING_SECRET"):
-        print(f"  ✅ Signing Secret: 설정됨")
+        print(f"  ??Signing Secret: ?�정??)
     else:
-        print(f"  ❌ SLACK_SIGNING_SECRET 미설정")
+        print(f"  ??SLACK_SIGNING_SECRET 미설??)
         ok = False
 
-    print("──────────────────────────────────────────────────")
+    print("?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�")
     if not ok:
-        print("  ⛔ 상태점검 실패 — 위 항목 확인 후 재시작하세요")
+        print("  ???�태?��? ?�패 ??????�� ?�인 ???�시?�하?�요")
 
-    # Slack에 재시작 상태 알림
+    # Slack???�시???�태 ?�림
     now_str = datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
     if ok:
         slack_msg = (
-            f"🟢 *Sandbox Doc Bot 재시작 완료* ({now_str})\n"
-            f"• 토큰: ✅  스코프: ✅  채널: ✅\n"
-            f"• 문서: {doc_count}개 / 캐시 파일: {file_count}개\n"
-            f"• 상태: 정상 — 키워드 감지 대기 중"
+            f"?�� *Sandbox Doc Bot ?�시???�료* ({now_str})\n"
+            f"???�큰: ?? ?�코?? ?? 채널: ??n"
+            f"??문서: {doc_count}�?/ 캐시 ?�일: {file_count}�?n"
+            f"???�태: ?�상 ???�워??감�? ?��?�?
         )
     else:
         slack_msg = (
-            f"🔴 *Sandbox Doc Bot 재시작 실패* ({now_str})\n"
-            f"• 상태점검 오류 — 봇이 시작되지 않았습니다. 설정을 확인해주세요."
+            f"?�� *Sandbox Doc Bot ?�시???�패* ({now_str})\n"
+            f"???�태?��? ?�류 ??봇이 ?�작?��? ?�았?�니?? ?�정???�인?�주?�요."
         )
     try:
         requests.post(
@@ -221,18 +224,20 @@ def startup_check() -> bool:
     return ok
 
 
-# ─── 진입점 ──────────────────────────────────────────────────────────────────
+# ?�?�?� 진입???�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 3000))
 
     print("=" * 50)
-    print("Sandbox Doc Bot 시작")
-    print(f"  헬프데스크 채널: {HELPDESK_CHANNEL}")
-    print(f"  포트: {port}")
-    print("  모드: HTTP — 키워드 감지 → 스레드 즉시 답변 + 파일 전송")
+    print("Sandbox Doc Bot ?�작")
+    print(f"  ?�프?�스??채널: {HELPDESK_CHANNEL}")
+    print(f"  ?�트: {port}")
+    print("  모드: HTTP ???�워??감�? ???�레??즉시 ?��? + ?�일 ?�송")
     print("=" * 50)
 
     if not startup_check():
         raise SystemExit(1)
 
     app.start(port=port)
+
+
