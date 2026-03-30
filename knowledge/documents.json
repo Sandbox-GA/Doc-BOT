@@ -1,0 +1,411 @@
+[
+  {
+    "name": "영문사업자등록증",
+    "aliases": [
+      "영문사업자등록증",
+      "영문 사업자등록증",
+      "영문사업자",
+      "영문 사업자",
+      "english business registration",
+      "영어사업자"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac812f8471ebc1377a0efa",
+    "notion_page_id": "30229436cbac812f8471ebc1377a0efa",
+    "local_file": "영문사업자등록증.pdf",
+    "description": "영문 사업자등록증 사본"
+  },
+  {
+    "name": "사업자등록증",
+    "aliases": [
+      "사업자등록증",
+      "사업자 등록증",
+      "사업자등록",
+      "사업자 등록",
+      "사업자 번호"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac814e9f13deee71e25746",
+    "notion_page_id": "30229436cbac814e9f13deee71e25746",
+    "local_file": "사업자등록증.pdf",
+    "description": "회사 사업자등록증 사본"
+  },
+  {
+    "name": "사업자등록증명원",
+    "aliases": [
+      "사업자등록증명원",
+      "사업자 등록증명원",
+      "등록증명원",
+      "사업자증명원"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81e390f5f17551cc26cd",
+    "notion_page_id": "30229436cbac81e390f5f17551cc26cd",
+    "local_file": "사업자등록증명원.pdf",
+    "description": "사업자등록증명원"
+  },
+  {
+    "name": "법인등기부등본",
+    "aliases": [
+      "법인등기",
+      "법인등기부",
+      "등기부등본",
+      "법인 등기"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81038a60cf79fb81c46c",
+    "notion_page_id": "30229436cbac81038a60cf79fb81c46c",
+    "local_file": "법인등기부등본.pdf",
+    "description": "법인등기부등본"
+  },
+  {
+    "name": "회사소개서",
+    "aliases": [
+      "회사소개서",
+      "회사 소개서",
+      "기업소개서",
+      "기업 소개서",
+      "컴퍼니 프로파일"
+    ],
+    "notion_url": "https://www.notion.so/32029436cbac803aa904f427ed87c8f8",
+    "notion_page_id": "32029436cbac803aa904f427ed87c8f8",
+    "local_file": "회사소개서.pptx",
+    "description": "샌드박스 회사소개서 (26년 1Q)"
+  },
+  {
+    "name": "벤처기업확인서",
+    "aliases": [
+      "벤처기업확인서",
+      "벤처 확인서",
+      "벤처기업 확인서",
+      "벤처확인"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81b6a8f3e0d01f4d1594",
+    "notion_page_id": "30229436cbac81b6a8f3e0d01f4d1594",
+    "local_file": "벤처기업확인서.pdf",
+    "description": "벤처기업확인서"
+  },
+  {
+    "name": "중소기업확인서",
+    "aliases": [
+      "중소기업확인서",
+      "중소기업 확인서",
+      "중소기업 증명",
+      "중소기업 인증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81d3b6b3c259e3cf02df",
+    "notion_page_id": "30229436cbac81d3b6b3c259e3cf02df",
+    "local_file": "중소기업확인서.pdf",
+    "description": "중소기업확인서"
+  },
+  {
+    "name": "위임장 양식",
+    "aliases": [
+      "위임장",
+      "위임장 양식",
+      "위임 양식",
+      "위임서"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac811aba9ad58cf151cd7b",
+    "notion_page_id": "30229436cbac811aba9ad58cf151cd7b",
+    "local_file": "위임장 양식.docx",
+    "description": "위임장 양식"
+  },
+  {
+    "name": "사용인감계 양식",
+    "aliases": [
+      "사용인감계",
+      "사용인감계 양식",
+      "인감계 양식"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac814fa762e8a67f15dd21",
+    "notion_page_id": "30229436cbac814fa762e8a67f15dd21",
+    "local_file": "사용인감계 양식.doc",
+    "description": "사용인감계 양식"
+  },
+  {
+    "name": "오피스 이용 가이드",
+    "aliases": [
+      "오피스 이용 가이드",
+      "오피스 가이드",
+      "사무실 이용 가이드",
+      "오피스 이용",
+      "사무실 가이드"
+    ],
+    "notion_url": "https://www.notion.so/31929436cbac806783e2fc20eeec1d90",
+    "notion_page_id": "31929436cbac806783e2fc20eeec1d90",
+    "local_file": "오피스 이용 가이드",
+    "description": "샌드박스 오피스 이용 가이드"
+  },
+  {
+    "name": "게임제작업자 등록증",
+    "aliases": [
+      "게임제작업자 등록증",
+      "게임제작업자",
+      "게임 제작업 등록증",
+      "게임제작업 등록"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81be9419fd83bff01069",
+    "notion_page_id": "30229436cbac81be9419fd83bff01069",
+    "local_file": "게임제작업자 등록증.pdf",
+    "description": "게임제작업자 등록증"
+  },
+  {
+    "name": "게임배급업자 등록증",
+    "aliases": [
+      "게임배급업자 등록증",
+      "게임배급업자",
+      "게임 배급업 등록증",
+      "게임배급업 등록"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac817b81a1ec4c065a7cfc",
+    "notion_page_id": "30229436cbac817b81a1ec4c065a7cfc",
+    "local_file": "게임배급업자 등록증.pdf",
+    "description": "게임배급업자 등록증"
+  },
+  {
+    "name": "출판사 신고확인증",
+    "aliases": [
+      "출판사 신고확인증",
+      "출판사 신고",
+      "출판사확인증",
+      "출판사 등록"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac810dbc9dd287f5822af6",
+    "notion_page_id": "30229436cbac810dbc9dd287f5822af6",
+    "local_file": "출판사 신고확인증.pdf",
+    "description": "출판사 신고확인증"
+  },
+  {
+    "name": "영화 제작업 신고증",
+    "aliases": [
+      "영화 제작업 신고증",
+      "영화제작업",
+      "영화 제작업 신고",
+      "영화제작업 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac8110a772c605717512e4",
+    "notion_page_id": "30229436cbac8110a772c605717512e4",
+    "local_file": "영화 제작업 신고증.pdf",
+    "description": "영화 제작업 신고증"
+  },
+  {
+    "name": "영화 배급업 신고증",
+    "aliases": [
+      "영화 배급업 신고증",
+      "영화배급업",
+      "영화 배급업 신고",
+      "영화배급업 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac813fb238f19a0d9be469",
+    "notion_page_id": "30229436cbac813fb238f19a0d9be469",
+    "local_file": "영화 배급업 신고증.pdf",
+    "description": "영화 배급업 신고증"
+  },
+  {
+    "name": "애니메이션 제작업 신고증",
+    "aliases": [
+      "애니메이션 제작업 신고증",
+      "애니메이션제작업",
+      "애니 제작업 신고",
+      "애니제작업 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac8167b1e8dc541f305a4d",
+    "notion_page_id": "30229436cbac8167b1e8dc541f305a4d",
+    "local_file": "애니메이션 제작업 신고증.pdf",
+    "description": "애니메이션 제작업 신고증"
+  },
+  {
+    "name": "애니메이션 배급업 신고증",
+    "aliases": [
+      "애니메이션 배급업 신고증",
+      "애니메이션배급업",
+      "애니 배급업 신고",
+      "애니배급업 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac8119b753e11c608df955",
+    "notion_page_id": "30229436cbac8119b753e11c608df955",
+    "local_file": "애니메이션 배급업 신고증.pdf",
+    "description": "애니메이션 배급업 신고증"
+  },
+  {
+    "name": "비디오물 제작업 신고증",
+    "aliases": [
+      "비디오물 제작업 신고증",
+      "비디오물제작업",
+      "비디오 제작업 신고",
+      "비디오제작업 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac8176afdcd1fea986bd07",
+    "notion_page_id": "30229436cbac8176afdcd1fea986bd07",
+    "local_file": "비디오물 제작업 신고증.pdf",
+    "description": "비디오물 제작업 신고증"
+  },
+  {
+    "name": "방송영상독립제작사 신고증",
+    "aliases": [
+      "방송영상독립제작사",
+      "방송영상 독립제작사 신고증",
+      "독립제작사 신고",
+      "방송독립제작사"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81e19b85e2ff6d8520b4",
+    "notion_page_id": "30229436cbac81e19b85e2ff6d8520b4",
+    "local_file": "방송영상독립제작사 신고증.pdf",
+    "description": "방송영상독립제작사 신고증"
+  },
+  {
+    "name": "부가통신사업 신고증명서",
+    "aliases": [
+      "부가통신사업 신고증명서",
+      "부가통신사업",
+      "부가통신 신고",
+      "부가통신사업자 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac8142a444f1b3e6309409",
+    "notion_page_id": "30229436cbac8142a444f1b3e6309409",
+    "local_file": "부가통신사업 신고증명서.pdf",
+    "description": "부가통신사업 신고증명서"
+  },
+  {
+    "name": "통신판매업 신고증",
+    "aliases": [
+      "통신판매업 신고증",
+      "통신판매업",
+      "통신판매 신고",
+      "통신판매업자 신고증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81619296d8199fade0ac",
+    "notion_page_id": "30229436cbac81619296d8199fade0ac",
+    "local_file": "통신판매업 신고증.pdf",
+    "description": "통신판매업 신고증"
+  },
+  {
+    "name": "대중문화예술기획업 등록증",
+    "aliases": [
+      "대중문화예술기획업 등록증",
+      "대중문화예술기획업",
+      "대중문화 기획업 등록",
+      "예술기획업 등록증"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac814aa69cc9b5b64b8334",
+    "notion_page_id": "30229436cbac814aa69cc9b5b64b8334",
+    "local_file": "대중문화예술기획업 등록증.pdf",
+    "description": "대중문화예술기획업 등록증"
+  },
+  {
+    "name": "소프트웨어사업자 현황확인서",
+    "aliases": [
+      "소프트웨어사업자 현황확인서",
+      "소프트웨어사업자",
+      "SW사업자 확인서",
+      "소프트웨어 사업자 확인"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac815ca2f0c39be219f86f",
+    "notion_page_id": "30229436cbac815ca2f0c39be219f86f",
+    "local_file": "소프트웨어사업자 현황확인서.pdf",
+    "description": "소프트웨어사업자 일반 현황 관리확인서"
+  },
+  {
+    "name": "직접생산확인서",
+    "aliases": [
+      "직접생산확인서",
+      "직접생산 확인서",
+      "직접생산",
+      "직접생산 증명"
+    ],
+    "notion_url": "https://www.notion.so/30229436cbac81f7afede28787d718c6",
+    "notion_page_id": "30229436cbac81f7afede28787d718c6",
+    "local_file": "직접생산확인서.pdf",
+    "description": "직접생산확인서"
+  },
+  {
+    "name": "법인카드 신청서",
+    "aliases": [
+      "법인카드 신청서",
+      "개인법인카드 신청서",
+      "법인카드 신청",
+      "IBK컴퍼니카드 신청서"
+    ],
+    "notion_url": "https://www.notion.so/31229436cbac8008ba73ffe5237ad32a",
+    "notion_page_id": "31229436cbac8008ba73ffe5237ad32a",
+    "local_file": "법인카드 신청서.pdf",
+    "description": "개인법인카드 신청서 (IBK컴퍼니카드)"
+  },
+  {
+    "name": "통장사본 원화",
+    "aliases": [
+      "통장사본 원화",
+      "원화 통장사본",
+      "매출입금 통장사본 원화",
+      "원화통장"
+    ],
+    "notion_url": "https://www.notion.so/31129436cbac800db217ccbf291cb588",
+    "notion_page_id": "31129436cbac800db217ccbf291cb588",
+    "local_file": "통장사본 원화.pdf",
+    "description": "매출입금용 통장사본 (원화)"
+  },
+  {
+    "name": "통장사본 외화",
+    "aliases": [
+      "통장사본 외화",
+      "외화 통장사본",
+      "매출입금 통장사본 외화",
+      "외화통장"
+    ],
+    "notion_url": "https://www.notion.so/31129436cbac8052b88aec86a01c96b7",
+    "notion_page_id": "31129436cbac8052b88aec86a01c96b7",
+    "local_file": "통장사본 외화.pdf",
+    "description": "매출입금용 통장사본 (외화)"
+  },
+  {
+    "name": "재직증명서",
+    "aliases": [
+      "재직증명서",
+      "재직 증명서",
+      "재직 확인서",
+      "재직확인"
+    ],
+    "notion_url": "https://www.notion.so/sandboxinc/30229436cbac81b8b88ef3bc1ab8fb7b",
+    "notion_page_id": "",
+    "local_file": "",
+    "description": "재직증명서 발급 안내"
+  },
+  {
+    "name": "급여명세서",
+    "aliases": [
+      "급여명세서",
+      "급여 명세서",
+      "페이슬립",
+      "payslip",
+      "급여 내역"
+    ],
+    "notion_url": "https://www.notion.so/sandboxinc/30229436cbac81b8b88ef3bc1ab8fb7b",
+    "notion_page_id": "",
+    "local_file": "",
+    "description": "급여명세서 안내"
+  },
+  {
+    "name": "경력증명서",
+    "aliases": [
+      "경력증명서",
+      "경력 증명서",
+      "경력 확인서"
+    ],
+    "notion_url": "https://www.notion.so/sandboxinc/30229436cbac81b8b88ef3bc1ab8fb7b",
+    "notion_page_id": "",
+    "local_file": "",
+    "description": "경력증명서 발급 안내"
+  },
+  {
+    "name": "건강검진 안내",
+    "aliases": [
+      "건강검진",
+      "건강 검진",
+      "건강검진 안내",
+      "건강검진 신청",
+      "건강 검진 안내",
+      "검진 신청"
+    ],
+    "notion_url": "https://www.notion.so/sandboxinc/2026-31929436cbac800e92f0f134179cd712",
+    "notion_page_id": "31929436cbac800e92f0f134179cd712",
+    "local_file": "2026 건강검진 시행 가이드.pdf",
+    "description": "2026년 건강검진 안내"
+  }
+]

@@ -1,0 +1,15 @@
+이 폴더에 Slack 헬프데스크 문서 요청 자동 응답 봇 소스코드가 있어.
+MASTER.md에 전체 구조·설정 방법이 있고, 봇은 Python + Slack Bolt (Socket Mode)로 동작해.
+
+아래 순서로 실행 환경 세팅해줘:
+
+1. MASTER.md 읽어서 전체 구조 파악
+2. 파이썬 가상환경 생성 (.venv) 및 패키지 설치 (requirements.txt)
+3. .env.example을 .env로 복사하고, MASTER.md 기준으로 어떤 값 입력해야 하는지 정리해줘
+4. .env 값 입력 완료 후 봇 실행 (python main.py)
+
+Windows PowerShell 실행 정책 문제 발생하면 알아서 해결해줘.
+인코딩 문제 나오면 PYTHONIOENCODING=utf-8 환경변수 추가해줘.
+
+실행되면 Slack 팀 채널에서 아래로 테스트:
+test: 사업자등록증 보내주세요
