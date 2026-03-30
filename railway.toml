@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python refresh_docs.py && python main.py"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
