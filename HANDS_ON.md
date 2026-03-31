@@ -138,7 +138,7 @@ claude
 ```
 /invite @Sandbox Doc Bot
 ```
-헬프데스크 채널, GA 팀 채널 두 곳 모두.
+샌드박스-문서자료실 채널, GA 팀 채널 두 곳 모두.
 
 ---
 
@@ -197,7 +197,7 @@ claude
 ### 프롬프트 1 — 프로젝트 방향 설명
 
 ```
-Slack 헬프데스크 채널에서 문서 요청 키워드를 감지해서
+Slack 샌드박스-문서자료실 채널에서 문서 요청 키워드를 감지해서
 Notion 자료실 링크나 파일을 자동으로 보내주는 봇을 만들 거야.
 
 파이썬, Slack Bolt (Socket Mode), Notion API를 쓸 거고
@@ -236,7 +236,7 @@ knowledge/documents.json 파일 만들어줘.
 config.py 만들어줘.
 
 포함할 내용:
-- HELPDESK_CHANNEL: Slack 헬프데스크 채널 ID (환경변수에서 읽기)
+- HELPDESK_CHANNEL: Slack 샌드박스-문서자료실 채널 ID (환경변수에서 읽기)
 - TEAM_CHANNEL: GA 팀 채널 ID (환경변수에서 읽기)
 - 근무시간: 9시~19시 (KST)
 - EXCLUDE_KEYWORDS: 인감, 인감증명, 인감 도장, 인감날인 (물리 대응 필요해서 봇 제외)
@@ -274,9 +274,9 @@ agents/doc_request_agent.py 만들어줘.
 main.py 만들어줘. Slack Bolt Socket Mode 기반.
 
 동작 방식:
-- 헬프데스크 채널 새 메시지 → doc_request_agent로 문서 요청 감지
+- 샌드박스-문서자료실 채널 새 메시지 → doc_request_agent로 문서 요청 감지
 - TEST_MODE=true: 팀 채널에 미리보기 카드 발송 (승인/건너뛰기 버튼 포함)
-- TEST_MODE=false: 헬프데스크 스레드에 즉시 답변 + 파일 첨부
+- TEST_MODE=false: 샌드박스-문서자료실 스레드에 즉시 답변 + 파일 첨부
 
 필터:
 - 근무시간 외 메시지 무시
@@ -319,7 +319,7 @@ refresh_docs.py 만들어줘.
    필요한 환경변수 목록과 설명 주석 포함:
    - DOC_BOT_TOKEN (Slack Bot Token, xoxb-로 시작)
    - DOC_APP_TOKEN (Slack App Token, xapp-로 시작)
-   - HELPDESK_CHANNEL (헬프데스크 채널 ID)
+   - HELPDESK_CHANNEL (샌드박스-문서자료실 채널 ID)
    - TEAM_CHANNEL (팀 채널 ID)
    - NOTION_TOKEN (Notion Integration Secret)
    - TEST_MODE (true/false)

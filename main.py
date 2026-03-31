@@ -1,6 +1,6 @@
 # Sandbox Doc Bot - 문서 요청 자동 안내 봇
 #
-# 역할: Slack 헬프데스크 채널에서 문서/서류 요청 키워드를 감지해
+# 역할: Slack 샌드박스-문서자료실 채널에서 문서/서류 요청 키워드를 감지해
 #       Notion 자료실 링크 또는 로컬 파일을 스레드로 바로 전송.
 #
 # Claude API 없음 — 순수 키워드 매칭으로 동작 (빠르고 가벼움)
@@ -9,7 +9,7 @@
 # 사전 조건:
 #   1. api.slack.com/apps 에서 Doc Bot 앱 생성
 #   2. .env에 DOC_BOT_TOKEN, DOC_APP_TOKEN 입력
-#   3. 헬프데스크 채널에 봇 초대: /invite @Sandbox Doc Bot
+#   3. 샌드박스-문서자료실 채널에 봇 초대: /invite @Sandbox Doc Bot
 #   4. python refresh_docs.py 실행 → 로컬 파일 캐시 생성
 
 import json
@@ -51,7 +51,7 @@ def _is_excluded(text: str) -> bool:
 def _run_test_query(client, channel: str, ts: str, test_text: str, logger):
     """
     팀 채널에서 'test:' 입력 시 문서 요청 감지를 테스트.
-    실제 헬프데스크 전송 없이 결과만 스레드로 확인 가능.
+    실제 샌드박스-문서자료실 전송 없이 결과만 스레드로 확인 가능.
     """
     doc_info = doc_request.detect_document_request(test_text)
     if doc_info:
@@ -98,7 +98,7 @@ def handle_message(event, client, logger):
         _run_test_query(client, TEAM_CHANNEL, event.get("ts", ""), test_text, logger)
         return
 
-    # ── 헬프데스크 채널만 이하 처리 ──────────────────────────────────────────
+    # ── 샌드박스-문서자료실 채널만 이하 처리 ─────────────────────────────────
     if channel != HELPDESK_CHANNEL:
         return
 
@@ -166,7 +166,7 @@ def handle_message(event, client, logger):
                         "elements": [
                             {
                                 "type": "button",
-                                "text": {"type": "plain_text", "text": "✅ 승인 (헬프데스크 답변)"},
+                                "text": {"type": "plain_text", "text": "✅ 승인 (샌드박스-문서자료실 답변)"},
                                 "style": "primary",
                                 "action_id": "doc_approve",
                                 "value": json.dumps({
@@ -195,7 +195,7 @@ def handle_message(event, client, logger):
             logger.error(f"[doc_request] 카드 발송 실패: {e}")
 
     else:
-        # 프로덕션 모드: 헬프데스크 스레드에 즉시 답변 + 파일 전송
+        # 프로덕션 모드: 샌드박스-문서자료실 스레드에 즉시 답변 + 파일 전송
         try:
             client.chat_postMessage(
                 channel=HELPDESK_CHANNEL,
@@ -209,7 +209,7 @@ def handle_message(event, client, logger):
             logger.error(f"[doc_request] 즉시 답변 실패: {e}")
 
 
-# ─── 버튼 액션: ✅ 승인 → 헬프데스크 답변 ───────────────────────────────────
+# ─── 버튼 액션: ✅ 승인 → 샌드박스-문서자료실 답변 ──────────────────────────
 @app.action("doc_approve")
 def handle_doc_approve(ack, body, client, logger):
     ack()
@@ -226,7 +226,7 @@ def handle_doc_approve(ack, body, client, logger):
     reply_text = payload.get("reply", "")
     has_file = payload.get("has_file", False)
 
-    # 헬프데스크 스레드에 답변 발송
+    # 샌드박스-문서자료실 스레드에 답변 발송
     try:
         client.chat_postMessage(
             channel=HELPDESK_CHANNEL,
@@ -247,13 +247,13 @@ def handle_doc_approve(ack, body, client, logger):
         client.chat_update(
             channel=preview_channel,
             ts=preview_ts,
-            text="✅ *헬프데스크 답변 완료*",
+            text="✅ *샌드박스-문서자료실 답변 완료*",
             blocks=[{
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": "✅ *헬프데스크 답변 완료*"},
+                "text": {"type": "mrkdwn", "text": "✅ *샌드박스-문서자료실 답변 완료*"},
             }],
         )
-        logger.info(f"[doc_approve] 헬프데스크 답변 완료: ts={helpdesk_ts}")
+        logger.info(f"[doc_approve] 샌드박스-문서자료실 답변 완료: ts={helpdesk_ts}")
     except Exception as e:
         logger.error(f"[doc_approve] 실패: {e}")
 
@@ -282,10 +282,10 @@ def handle_doc_skip(ack, body, client, logger):
 if __name__ == "__main__":
     print("=" * 50)
     print("Sandbox Doc Bot 시작")
-    print(f"  헬프데스크 채널: {HELPDESK_CHANNEL}")
+    print(f"  샌드박스-문서자료실 채널: {HELPDESK_CHANNEL}")
     print(f"  팀 채널: {TEAM_CHANNEL}")
     print("  기능: 문서 요청 키워드 감지 → Notion 링크 / 파일 전송")
-    print(f"  모드: {'🧪 테스트 (팀 채널 승인 후 답변)' if TEST_MODE else '🚀 프로덕션 (헬프데스크 즉시 답변)'}")
+    print(f"  모드: {'🧪 테스트 (팀 채널 승인 후 답변)' if TEST_MODE else '🚀 프로덕션 (샌드박스-문서자료실 즉시 답변)'}")
     print("=" * 50)
 
     handler = SocketModeHandler(app, os.environ["DOC_APP_TOKEN"])
