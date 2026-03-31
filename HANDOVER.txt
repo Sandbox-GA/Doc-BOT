@@ -1,0 +1,44 @@
+[Sandbox Doc Bot 유지보수 가이드]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+봇은 Railway에서 24시간 자동 운영 중입니다.
+팀원은 코드 수정 → GitHub push만 하면 자동 반영됩니다.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【최초 1회 세팅】
+
+STEP 1. Git 설치 확인
+   VS Code → Terminal → New Terminal 열고 입력:
+   git --version
+   → 버전 숫자 안 나오면 git-scm.com 에서 설치
+
+STEP 2. 파일 받기
+   터미널에서 입력:
+   cd C:\Users\[내 이름]\Desktop
+   git clone https://github.com/Sandbox-GA/Doc-BOT.git
+
+STEP 3. VS Code에서 폴더 열기
+   File → Open Folder → Doc-BOT 폴더 선택
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【수정 방법】
+
+alias 추가 / 문서 추가:
+   VS Code 왼쪽 파일 목록 → knowledge/documents.json 열기
+   → 항목 수정 후 저장
+
+수정 내용 반영하기:
+   VS Code 터미널에서:
+   git add .
+   git commit -m "수정 내용 한 줄 설명"
+   git push
+   → Railway가 자동으로 봇 재시작 (1~2분 소요)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+유지보수 상세 가이드는 MASTER.md 참고.
+Claude Code로 작업 시 .claude/CLAUDE.md가 컨텍스트를 자동 로드합니다.
+예시: "사업자등록증 alias에 '사업자증명서' 추가해줘"
