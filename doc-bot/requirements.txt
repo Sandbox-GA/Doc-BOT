@@ -1,0 +1,7 @@
+slack-bolt>=1.18.0
+slack-sdk>=3.27.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+notion-client>=2.2.1
+tzdata>=2024.1
+flask>=3.0.0
