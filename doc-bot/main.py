@@ -95,7 +95,39 @@ def handle_message(event, client, logger):
     if not doc_list:
         return
 
-    # 감지 → 안내 메시지
+    # 실제 문서 목록만 필터 (모호한_키워드, 자료실_없음 등 제외)
+    real_docs = [d for d in doc_list if d["name"] not in ("모호한_키워드", "없는_키워드", "자료실_없음")]
+
+    # 복수 문서 매칭 → 버튼 선택지 제시
+    if len(real_docs) > 1:
+        try:
+            buttons = [
+                {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": d["name"]},
+                    "action_id": f"doc_select",
+                    "value": d["name"],
+                }
+                for d in real_docs[:5]  # 최대 5개
+            ]
+            client.chat_postMessage(
+                channel=DOC_CHANNEL,
+                thread_ts=thread_ts,
+                text="어떤 서류가 필요하신가요?",
+                blocks=[
+                    {
+                        "type": "section",
+                        "text": {"type": "mrkdwn", "text": "*📂 여러 서류가 검색됐어요. 필요한 서류를 선택해 주세요!*"},
+                    },
+                    {"type": "actions", "elements": buttons},
+                ],
+            )
+            logger.info(f"[doc_request] 다중 매칭 버튼 제시: {[d['name'] for d in real_docs]}, ts={ts}")
+        except Exception as e:
+            logger.error(f"[doc_request] 버튼 메시지 전송 실패: {e}")
+        return
+
+    # 단일 문서 매칭 → 기존 방식
     try:
         client.chat_postMessage(
             channel=DOC_CHANNEL,
@@ -124,6 +156,61 @@ def handle_message(event, client, logger):
             logger.info(f"[doc_request] 응답 완료: {doc_info['name']}, ts={ts}")
         except Exception as e:
             logger.error(f"[doc_request] 실패: {e}")
+
+
+# ─── 버튼 액션: 문서 선택 → 파일 전송 ────────────────────────────────────────────────
+@app.action("doc_select")
+def handle_doc_select(ack, body, client, logger):
+    ack()
+    doc_name = body["actions"][0]["value"]
+    channel = body["channel"]["id"]
+    thread_ts = body["message"].get("thread_ts") or body["message"]["ts"]
+
+    # 선택한 문서 찾기
+    documents = doc_request._load_documents()
+    doc = next((d for d in documents if d["name"] == doc_name), None)
+    if not doc:
+        logger.error(f"[doc_select] 문서 없음: {doc_name}")
+        return
+
+    doc_info = {
+        "name": doc["name"],
+        "notion_url": doc.get("notion_url", ""),
+        "description": doc.get("description", ""),
+        "local_file": doc.get("local_file", ""),
+        "local_files": doc.get("local_files", []),
+        "is_group": doc.get("is_group", False),
+        "direct_url": doc.get("direct_url", ""),
+    }
+
+    has_file = doc_request.has_local_file(doc_info)
+    can_download = not has_file and doc_request.has_downloadable_url(doc_info)
+    reply_text = doc_request.build_reply(doc_info, has_file=has_file)
+
+    try:
+        # 버튼 메시지를 선택 완료로 업데이트
+        client.chat_update(
+            channel=channel,
+            ts=body["message"]["ts"],
+            text=f"✅ *{doc_name}* 선택하셨습니다.",
+            blocks=[{
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": f"✅ *{doc_name}* 선택하셨습니다."},
+            }],
+        )
+        # 파일 전송
+        client.chat_postMessage(
+            channel=channel,
+            thread_ts=thread_ts,
+            text=reply_text,
+        )
+        if has_file:
+            doc_request.upload_local_file(client, channel, thread_ts, doc_info)
+        elif can_download:
+            doc_request.download_and_upload_url(client, channel, thread_ts, doc_info)
+        logger.info(f"[doc_select] 파일 전송 완료: {doc_name}")
+    except Exception as e:
+        logger.error(f"[doc_select] 실패: {e}")
 
 
 # ─── 시작 상태 점검 ────────────────────────────────────────────────────────────────
