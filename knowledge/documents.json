@@ -409,6 +409,19 @@
     "description": "2026 AD Business 소개서 (2Q)"
   },
   {
+    "name": "크리에이터 소개서",
+    "aliases": [
+      "크리에이터 소개서",
+      "크리에이터소개서",
+      "샌드박스 크리에이터 소개서",
+      "creator 소개서"
+    ],
+    "notion_url": "https://www.notion.so/sandboxinc/Confidential-2026-_Apr_v-1-33529436cbac806e99a7c345a7b87991",
+    "notion_page_id": "33529436cbac806e99a7c345a7b87991",
+    "local_file": "[Confidential] 2026 샌드박스 크리에이터 소개서_Apr_v.1.pdf",
+    "description": "2026 샌드박스 크리에이터 소개서 Apr v.1"
+  },
+  {
     "name": "건강검진 안내",
     "aliases": [
       "건강검진",
