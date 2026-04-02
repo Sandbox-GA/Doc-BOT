@@ -80,22 +80,6 @@
     "description": "위임장 양식"
   },
   {
-    "name": "(영문) 사업자등록증",
-    "aliases": [
-      "(영문) 사업자등록증",
-      "(영문)사업자등록증",
-      "영문 사업자등록증",
-      "(영문)"
-    ],
-    "notion_url": "https://www.notion.so/30229436cbac812f8471ebc1377a0efa",
-    "notion_page_id": "30229436cbac812f8471ebc1377a0efa",
-    "local_file": "영문사업자등록증.pdf",
-    "local_files": [
-      "영문사업자등록증.pdf"
-    ],
-    "description": "(영문) 사업자등록증"
-  },
-  {
     "name": "영화 배급업 신고증",
     "aliases": [
       "영화 배급업 신고증",
@@ -326,50 +310,6 @@
       "직접생산확인서.pdf"
     ],
     "description": "직접생산확인서"
-  },
-  {
-    "name": "매출입금용_통장사본_원화",
-    "aliases": [
-      "매출입금용_통장사본_원화",
-      "매출입금용",
-      "매출입금용 통장사본 원화",
-      "통장사본",
-      "통장",
-      "회사통장",
-      "계좌번호",
-      "원화통장",
-      "원화 통장사본",
-      "통장사본 원화"
-    ],
-    "notion_url": "https://www.notion.so/_-_-31129436cbac800db217ccbf291cb588",
-    "notion_page_id": "31129436cbac800db217ccbf291cb588",
-    "local_file": "매출입금용_통장사본_원화.pdf",
-    "local_files": [
-      "매출입금용_통장사본_원화.pdf"
-    ],
-    "description": "매출입금용_통장사본_원화"
-  },
-  {
-    "name": "매출입금용_통장사본_외화",
-    "aliases": [
-      "매출입금용_통장사본_외화",
-      "매출입금용",
-      "매출입금용 통장사본 외화",
-      "통장사본",
-      "통장",
-      "회사통장",
-      "계좌번호",
-      "외화통장",
-      "외화 통장사본",
-      "통장사본 외화"
-    ],
-    "notion_url": "https://www.notion.so/_-_-31129436cbac8052b88aec86a01c96b7",
-    "notion_page_id": "31129436cbac8052b88aec86a01c96b7",
-    "local_file": "매출입금용_통장사본_외화.pdf",
-    "local_files": [
-      "매출입금용_통장사본_외화.pdf"
-    ],
-    "description": "매출입금용_통장사본_외화"
   },
   {
     "name": "개인법인카드_신청서_IBK컴퍼니카드",
@@ -760,7 +700,8 @@
       "크리에이터 소개서 v.1",
       "크리에이터소개서 v1",
       "샌드박스 크리에이터 소개서 v1",
-      "creator 소개서 v1"
+      "creator 소개서 v1",
+      "크리에이터 소개서"
     ],
     "notion_url": "https://www.notion.so/sandboxinc/Confidential-2026-_Apr_v-1-33529436cbac806e99a7c345a7b87991",
     "notion_page_id": "33529436cbac806e99a7c345a7b87991",
@@ -774,7 +715,8 @@
       "크리에이터 소개서 v.2",
       "크리에이터소개서 v2",
       "샌드박스 크리에이터 소개서 v2",
-      "creator 소개서 v2"
+      "creator 소개서 v2",
+      "크리에이터 소개서"
     ],
     "notion_url": "https://www.notion.so/sandboxinc/Confidential-2026-_Apr_v-2-33529436cbac80d187f9c3b707fd4dc6",
     "notion_page_id": "33529436cbac80d187f9c3b707fd4dc6",
@@ -788,7 +730,8 @@
       "게이밍 크리에이터 소개서 v1",
       "게이밍 크리에이터 소개서 v.1",
       "샌드박스 게이밍 크리에이터 소개서",
-      "gaming 크리에이터 소개서"
+      "gaming 크리에이터 소개서",
+      "게이밍 크리에이터"
     ],
     "notion_url": "https://www.notion.so/sandboxinc/Confidential-2026-_Apr_v-1-33529436cbac801eb6b7daa6fd1c1248",
     "notion_page_id": "33529436cbac801eb6b7daa6fd1c1248",
