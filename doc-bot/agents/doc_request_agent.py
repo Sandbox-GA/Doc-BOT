@@ -91,11 +91,15 @@ def _load_documents() -> list:
                 _documents_cache = json.load(f)
             _cache_mtime = mtime
             # 별칭 사전 정규화 (메시지마다 반복 처리 방지)
-            _aliases_cache = [
-                (alias.replace(" ", "").lower(), i)
-                for i, doc in enumerate(_documents_cache)
-                for alias in doc.get("aliases", [])
-            ]
+            _aliases_cache = sorted(
+                [
+                    (alias.replace(" ", "").lower(), i)
+                    for i, doc in enumerate(_documents_cache)
+                    for alias in doc.get("aliases", [])
+                ],
+                key=lambda x: len(x[0]),
+                reverse=True,
+            )
     except (OSError, json.JSONDecodeError) as e:
         logger.error(f"[doc_request] documents.json 로드 실패: {e}")
     return _documents_cache
