@@ -281,7 +281,9 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             documents[idx]["local_files"] = all_local_files
             if direct_url:
                 documents[idx]["direct_url"] = direct_url
-            documents[idx]["aliases"] = make_aliases(raw_name)
+            existing_aliases = documents[idx].get("aliases", [])
+            new_aliases = make_aliases(raw_name)
+            documents[idx]["aliases"] = list(dict.fromkeys(existing_aliases + [a for a in new_aliases if a not in existing_aliases]))
 
         # ── 파일 다운로드 ───────────────────────────────────────────
         for local_file, file_url in valid_files:
