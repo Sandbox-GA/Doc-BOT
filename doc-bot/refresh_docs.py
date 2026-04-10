@@ -30,6 +30,11 @@ NOTION_VER = "2022-06-28"
 # 지원하는 파일 확장자 (Notion에서 직접 다운로드 가능한 파일)
 VALID_EXTENSIONS = {'.pdf', '.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.hwp', '.zip'}
 
+# 동기화 제외 page_id 목록 (다른 항목에 통합된 중복 Notion 페이지)
+SKIP_PAGE_IDS = {
+    "30229436cbac81d4b9f9ff40022a1f6f",  # 구 '회사소개서' — '2026 1Q 회사소개서 국문, 영문 PPT/PDF'로 통합
+}
+
 # 문서명 앞 접두사 패턴 (제거 대상)
 PREFIX_PATTERN = re.compile(r'^\s*(\[.*?\]\s*)+')
 
@@ -185,6 +190,8 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
 
     for page in pages:
         page_id = page["id"].replace("-", "")
+        if page_id in SKIP_PAGE_IDS:
+            continue
         props = page["properties"]
         notion_url = page.get("url", "")
 
