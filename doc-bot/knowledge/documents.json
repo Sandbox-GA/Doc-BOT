@@ -330,20 +330,26 @@
     "description": "개인법인카드_신청서_IBK컴퍼니카드"
   },
   {
-    "name": "2026 1Q 회사소개서 PPT/PDF",
+    "name": "2026 1Q 회사소개서 국문, 영문 PPT/PDF",
     "aliases": [
+      "2026 1Q 회사소개서 국문, 영문 PPT/PDF",
       "2026 1Q 회사소개서 PPT/PDF",
       "20261Q회사소개서PPT/PDF",
-      "회사소개서"
+      "회사소개서",
+      "영문 회사소개서",
+      "company profile",
+      "SANDBOX NETWORK COMPANY PROFILE"
     ],
-    "notion_url": "https://www.notion.so/2026-1Q-PPT-PDF-32029436cbac803aa904f427ed87c8f8",
+    "notion_url": "https://www.notion.so/sandboxinc/2026-1Q-PPT-PDF-32029436cbac803aa904f427ed87c8f8",
     "notion_page_id": "32029436cbac803aa904f427ed87c8f8",
     "local_file": "[최종] 샌드박스네트워크_회사소개서_26_1Q.pptx",
     "local_files": [
       "[최종] 샌드박스네트워크_회사소개서_26_1Q.pptx",
-      "[최종] 샌드박스네트워크_회사소개서_26_1Q.pdf"
+      "[최종] 샌드박스네트워크_회사소개서_26_1Q.pdf",
+      "[EN] 2026 SANDBOX NETWORK COMPANY PROFILE_26_1Q.pptx",
+      "[EN] 2026 SANDBOX NETWORK COMPANY PROFILE_26_1Q.pdf"
     ],
-    "description": "2026 1Q 회사소개서 PPT/PDF"
+    "description": "2026 1Q 회사소개서 국문, 영문 PPT/PDF"
   },
   {
     "name": "주업종코드",
@@ -387,20 +393,6 @@
       "재택근무 보고 서식.xlsx"
     ],
     "description": "재택근무 보고 서식"
-  },
-  {
-    "name": "회사소개서",
-    "aliases": [
-      "회사소개서"
-    ],
-    "notion_url": "https://www.notion.so/30229436cbac81d4b9f9ff40022a1f6f",
-    "notion_page_id": "30229436cbac81d4b9f9ff40022a1f6f",
-    "local_file": "[최종] 샌드박스네트워크_회사소개서_26_1Q.pdf",
-    "local_files": [
-      "[최종] 샌드박스네트워크_회사소개서_26_1Q.pdf",
-      "[최종] 샌드박스네트워크_회사소개서_26_1Q.pptx"
-    ],
-    "description": "회사소개서"
   },
   {
     "name": "건강검진 안내",
