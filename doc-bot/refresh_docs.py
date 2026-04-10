@@ -207,14 +207,32 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
 
         # 외부 URL 전용 (파일 없음) 처리
         if not all_files:
-            # URL 전용이거나 파일 없는 경우
-            direct_url = url_prop
-            if not direct_url:
+            if not url_prop and not notion_url:
                 print(f"  ⏭  {doc_name}: 실물 파일 없음 — 건너뜀")
                 skipped += 1
+                continue
+            # URL 또는 notion_url이 있으면 링크 전용 항목으로 등록
+            print(f"  🔗 {doc_name}: 링크 전용 등록")
+            if page_id not in existing_ids:
+                new_doc = {
+                    "name": doc_name,
+                    "aliases": make_aliases(raw_name),
+                    "notion_url": notion_url,
+                    "notion_page_id": page_id,
+                    "local_file": "",
+                    "description": doc_name,
+                }
+                if url_prop:
+                    new_doc["direct_url"] = url_prop
+                documents.append(new_doc)
+                existing_ids[page_id] = len(documents) - 1
+                added += 1
             else:
-                print(f"  ⏭  {doc_name}: 링크 전용")
-                skipped += 1
+                idx = existing_ids[page_id]
+                documents[idx]["notion_url"] = notion_url
+                if url_prop:
+                    documents[idx]["direct_url"] = url_prop
+            skipped += 1
             continue
 
         page_had_file = False
@@ -289,11 +307,11 @@ def main():
     else:
         documents = []
 
-    # 실물 파일 없는 기존 항목 정리 (is_group, direct_url 전용 수동 항목은 보존)
+    # 실물 파일 없는 기존 항목 정리 (is_group, direct_url, notion_url 전용 항목은 보존)
     before = len(documents)
     documents = [
         d for d in documents
-        if d.get("local_file") or d.get("is_group") or d.get("direct_url")
+        if d.get("local_file") or d.get("is_group") or d.get("direct_url") or d.get("notion_url")
     ]
     existing_ids = {doc.get("notion_page_id", ""): i for i, doc in enumerate(documents)}
     if before != len(documents):
