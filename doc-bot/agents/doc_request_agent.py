@@ -340,8 +340,10 @@ def build_reply(doc_info: dict, has_file: bool = False) -> str:
     if has_file:
         return header + library_line + f"파일도 바로 아래에 첨부해 드립니다! 📎"
 
+    direct_url = doc_info.get("direct_url", "")
     notion_url = doc_info.get("notion_url", "")
-    if notion_url:
-        return header + f"아래 링크에서 확인하실 수 있습니다.\n👉 <{notion_url}|📄 {doc_info['name']}>\n\n파일이 없는 경우 GA팀에 문의해 주세요."
+    link_url = direct_url or notion_url
+    if link_url:
+        return header + f"아래 링크에서 확인하실 수 있습니다.\n👉 <{link_url}|📄 {doc_info['name']}>\n\n파일이 없는 경우 GA팀에 문의해 주세요."
 
     return header + library_line + f"파일이 없는 경우 GA팀에 문의해 주세요."
