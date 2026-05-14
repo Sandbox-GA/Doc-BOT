@@ -264,9 +264,9 @@
     ],
     "notion_url": "https://www.notion.so/30229436cbac81d3b6b3c259e3cf02df",
     "notion_page_id": "30229436cbac81d3b6b3c259e3cf02df",
-    "local_file": "중소기업확인서.pdf",
+    "local_file": "중소기업확인서(26.05.14).pdf",
     "local_files": [
-      "중소기업확인서.pdf"
+      "중소기업확인서(26.05.14).pdf"
     ],
     "description": "중소기업확인서"
   },
@@ -1084,19 +1084,6 @@
     "local_file": "",
     "description": "구성원 제휴혜택 참고",
     "direct_url": "https://www.notion.so/sandboxinc/13d29436cbac81f69f3ef76d01e2a795?source=copy_link"
-  },
-  {
-    "name": "테스트",
-    "aliases": [
-      "테스트"
-    ],
-    "notion_url": "https://www.notion.so/33e29436cbac8079aaf0e724c4fa3648",
-    "notion_page_id": "33e29436cbac8079aaf0e724c4fa3648",
-    "local_file": "샌드박스네트워크사업자등록증.pdf",
-    "local_files": [
-      "샌드박스네트워크사업자등록증.pdf"
-    ],
-    "description": "테스트"
   },
   {
     "name": "26.SANDBOX STUDIOS_통합소개서   _FIN_260421",
