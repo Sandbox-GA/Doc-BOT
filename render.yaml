@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: sandbox-doc-bot
+    runtime: docker
+    region: singapore
+    plan: free
+    branch: main
+    dockerfilePath: ./doc-bot/Dockerfile
+    dockerContext: ./doc-bot
+    autoDeploy: true
+    envVars:
+      - key: DOC_BOT_TOKEN
+        sync: false
+      - key: SLACK_SIGNING_SECRET
+        sync: false
+      - key: NOTION_TOKEN
+        sync: false
+      - key: HELPDESK_CHANNEL
+        sync: false
+      - key: TEAM_CHANNEL
+        sync: false
+      - key: TEST_MODE
+        value: "false"
