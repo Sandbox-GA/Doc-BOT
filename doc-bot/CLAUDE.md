@@ -32,8 +32,14 @@
 
 `REFRESH_TRIGGER_CHANNEL`(기본 `C0AUG33LBLJ`) 에 메시지가 들어오면
 `main.py` 핸들러가 백그라운드 스레드로 `refresh_docs.main()` 을 실행하고,
-신규 추가분이 있으면 `REFRESH_NOTIFY_CHANNEL`(미설정 시 `DOC_CHANNEL`) 에
-`📚 신규 문서 N건 등록` 1줄을 보낸다. 동시 실행은 lock 으로 방지.
+**신규 등록 또는 파일 갱신이 1건이라도 있으면** `REFRESH_NOTIFY_CHANNEL`
+(미설정 시 `DOC_CHANNEL`) 에 다음 형식으로 1줄 보낸다:
+
+- 둘 다 있음: `📚 자료실 업데이트: 신규 N건 / 갱신 M건`
+- 신규만: `📚 자료실 업데이트: 신규 N건`
+- 갱신만: `📚 자료실 업데이트: 갱신 M건`
+
+둘 다 0이면 알림 생략. 동시 실행은 lock 으로 방지.
 
 ---
 
