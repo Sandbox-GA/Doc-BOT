@@ -78,16 +78,23 @@ def _run_refresh_and_notify(client) -> None:
         logger.info("[refresh] 자료실 알림 감지 → refresh_docs.main() 시작")
         result = refresh_docs.main()
         added = result.get("added", 0)
+        updated = result.get("updated", 0)
         logger.info(
-            f"[refresh] 완료: 신규 {added} / 파일 갱신 {result.get('updated', 0)} / "
+            f"[refresh] 완료: 신규 {added} / 파일 갱신 {updated} / "
             f"건너뜀 {result.get('skipped', 0)} / 실패 {result.get('failed', 0)} / "
             f"총 문서 {result.get('doc_count', 0)}"
         )
-        if added > 0:
+        if added > 0 or updated > 0:
+            parts = []
+            if added > 0:
+                parts.append(f"신규 {added}건")
+            if updated > 0:
+                parts.append(f"갱신 {updated}건")
+            summary = " / ".join(parts)
             try:
                 client.chat_postMessage(
                     channel=NOTIFY_CHANNEL,
-                    text=f"📚 신규 문서 {added}건 등록",
+                    text=f"📚 자료실 업데이트: {summary}",
                 )
             except Exception as e:
                 logger.warning(f"[refresh] 알림 전송 실패: {e}")
