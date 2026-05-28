@@ -306,7 +306,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
     return added, updated, skipped, failed
 
 
-def main():
+def main() -> dict:
     FILES_DIR.mkdir(parents=True, exist_ok=True)
 
     # 기존 documents.json 로드
@@ -349,7 +349,13 @@ def main():
     print(f"📝 documents.json 업데이트 완료 ({len(documents)}개 항목)")
     print("=" * 55)
 
-    # notify_slack 비활성화 (채널 알림 불필요)
+    return {
+        "added": total_added,
+        "updated": total_updated,
+        "skipped": total_skipped,
+        "failed": total_failed,
+        "doc_count": len(documents),
+    }
 
 
 def notify_slack(doc_count: int, added: int, updated: int, failed: int):
