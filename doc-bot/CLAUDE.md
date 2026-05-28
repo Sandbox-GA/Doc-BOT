@@ -28,6 +28,15 @@
 
 ---
 
+## 자료실 신규 문서 자동 리프레시
+
+`REFRESH_TRIGGER_CHANNEL`(기본 `C0AUG33LBLJ`) 에 메시지가 들어오면
+`main.py` 핸들러가 백그라운드 스레드로 `refresh_docs.main()` 을 실행하고,
+신규 추가분이 있으면 `REFRESH_NOTIFY_CHANNEL`(미설정 시 `DOC_CHANNEL`) 에
+`📚 신규 문서 N건 등록` 1줄을 보낸다. 동시 실행은 lock 으로 방지.
+
+---
+
 ## 주요 파일 역할
 
 ```

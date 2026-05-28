@@ -16,6 +16,7 @@ import logging
 import os
 import re
 import sys
+import threading
 from collections import OrderedDict
 
 import requests
@@ -36,6 +37,16 @@ from config import (
     EXCLUDE_KEYWORDS,
 )
 import agents.doc_request_agent as doc_request
+import refresh_docs
+
+# ─── 자료실 신규 문서 알림 트리거 ──────────────────────────────────────────────────
+# Notion 자료실에 새 문서가 등록되면 알림이 떨어지는 채널.
+# 이 채널에 메시지가 들어오면 refresh_docs.main() 을 백그라운드로 실행하고
+# 신규 추가분이 있으면 운영 채널(NOTIFY_CHANNEL) 에 1줄 알림을 보낸다.
+REFRESH_TRIGGER_CHANNEL = os.environ.get("REFRESH_TRIGGER_CHANNEL", "C0AUG33LBLJ")
+NOTIFY_CHANNEL = os.environ.get("REFRESH_NOTIFY_CHANNEL", DOC_CHANNEL)
+_refresh_lock = threading.Lock()
+_refresh_running = False
 
 # ─── Slack Bolt 앱 초기화 (HTTP 모드) ─────────────────────────────────────────────
 app = App(
@@ -54,16 +65,62 @@ def _is_excluded(text: str) -> bool:
     return any(kw in text for kw in EXCLUDE_KEYWORDS)
 
 
+# ─── 자료실 신규 문서 알림 → 자동 리프레시 ────────────────────────────────────────
+def _run_refresh_and_notify(client) -> None:
+    """refresh_docs.main() 을 실행하고 신규 추가분이 있으면 운영 채널에 알림."""
+    global _refresh_running
+    with _refresh_lock:
+        if _refresh_running:
+            logger.info("[refresh] 이미 진행 중 — 트리거 무시")
+            return
+        _refresh_running = True
+    try:
+        logger.info("[refresh] 자료실 알림 감지 → refresh_docs.main() 시작")
+        result = refresh_docs.main()
+        added = result.get("added", 0)
+        logger.info(
+            f"[refresh] 완료: 신규 {added} / 파일 갱신 {result.get('updated', 0)} / "
+            f"건너뜀 {result.get('skipped', 0)} / 실패 {result.get('failed', 0)} / "
+            f"총 문서 {result.get('doc_count', 0)}"
+        )
+        if added > 0:
+            try:
+                client.chat_postMessage(
+                    channel=NOTIFY_CHANNEL,
+                    text=f"📚 신규 문서 {added}건 등록",
+                )
+            except Exception as e:
+                logger.warning(f"[refresh] 알림 전송 실패: {e}")
+    except Exception as e:
+        logger.error(f"[refresh] 실행 실패: {e}", exc_info=True)
+    finally:
+        with _refresh_lock:
+            _refresh_running = False
+
+
 # ─── 이벤트: 메시지 핸들러 ─────────────────────────────────────────────────────────
 @app.event("message")
 def handle_message(event, client, logger):
     message = event
-    # 삭제·수정·봇 메시지 등 처리 불필요한 subtype 제외
     subtype = event.get("subtype", "")
+    channel = message.get("channel")
+
+    # 자료실 신규 문서 알림 채널 → bot_message 도 트리거로 사용 ────────────────────
+    if channel == REFRESH_TRIGGER_CHANNEL:
+        if subtype in ("message_deleted", "message_changed",
+                       "channel_join", "channel_leave", "channel_topic"):
+            return
+        threading.Thread(
+            target=_run_refresh_and_notify,
+            args=(client,),
+            daemon=True,
+        ).start()
+        return
+
+    # 일반 채널은 삭제·수정·봇·시스템 subtype 제외 ──────────────────────────────────
     if subtype in ("message_deleted", "message_changed", "bot_message",
                    "channel_join", "channel_leave", "channel_topic"):
         return
-    channel = message.get("channel")
 
     # 샌드박스-문서자료실 채널만 이하 처리 ────────────────────────────────────────────────────
     if channel != DOC_CHANNEL:
