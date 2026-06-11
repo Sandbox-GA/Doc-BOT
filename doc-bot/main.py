@@ -114,24 +114,28 @@ def handle_message(event, client, logger):
     subtype = event.get("subtype", "")
     channel = message.get("channel")
 
-    # 테스트 프리뷰: 지정 채널에서 'test: <문구>' → 감지 결과만 미리보기(실제 전송 없음)
-    # 'test:' 가 아닌 메시지는 아래 트리거/일반 로직으로 그대로 흘려보낸다.
+    # 테스트 프리뷰: 'test: <문구>' 또는 **스레드 답글**(prefix 없이도) → 감지 결과 미리보기(실제 전송 없음)
+    # 둘 다 아닌 일반 top-level 메시지는 아래 트리거/일반 로직으로 흘려보낸다.
     if TEST_CHANNEL and channel == TEST_CHANNEL:
         raw = (message.get("text") or "").strip()
-        if not message.get("bot_id") and not subtype and raw.lower().replace(" ", "").startswith("test:"):
-            query = raw.split(":", 1)[1].strip()
-            ts = message.get("ts", "")
+        ts = message.get("ts", "")
+        thread_ts = message.get("thread_ts")
+        is_thread_reply = bool(thread_ts) and thread_ts != ts
+        is_test_cmd = raw.lower().replace(" ", "").startswith("test:")
+        if not message.get("bot_id") and not subtype and (is_test_cmd or is_thread_reply):
+            query = raw.split(":", 1)[1].strip() if is_test_cmd else raw
+            reply_thread = thread_ts or ts
             if query:
                 results = doc_request.detect_document_requests(query)
                 if not results:
                     client.chat_postMessage(
-                        channel=channel, thread_ts=ts,
+                        channel=channel, thread_ts=reply_thread,
                         text=f"🧪 *테스트* — '{query}': 감지된 문서 요청이 없습니다.")
                 else:
                     for di in results:
                         hf = (not di.get("is_group")) and doc_request.has_local_file(di)
                         client.chat_postMessage(
-                            channel=channel, thread_ts=ts,
+                            channel=channel, thread_ts=reply_thread,
                             text=f"🧪 *테스트 결과* — `{query}`\n\n{doc_request.build_reply(di, has_file=hf)}")
             return
 
