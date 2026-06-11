@@ -45,6 +45,8 @@ import refresh_docs
 # 신규 추가분이 있으면 운영 채널(NOTIFY_CHANNEL) 에 1줄 알림을 보낸다.
 REFRESH_TRIGGER_CHANNEL = os.environ.get("REFRESH_TRIGGER_CHANNEL", "C0AUG33LBLJ")
 NOTIFY_CHANNEL = os.environ.get("REFRESH_NOTIFY_CHANNEL", DOC_CHANNEL)
+# 'test: <문구>' 입력 시 감지 결과만 미리보기(실제 자료실 전송 없음). 기본=알림채널.
+TEST_CHANNEL = os.environ.get("TEST_CHANNEL", "C0AUG33LBLJ")
 _refresh_lock = threading.Lock()
 _refresh_running = False
 
@@ -111,6 +113,27 @@ def handle_message(event, client, logger):
     message = event
     subtype = event.get("subtype", "")
     channel = message.get("channel")
+
+    # 테스트 프리뷰: 지정 채널에서 'test: <문구>' → 감지 결과만 미리보기(실제 전송 없음)
+    # 'test:' 가 아닌 메시지는 아래 트리거/일반 로직으로 그대로 흘려보낸다.
+    if TEST_CHANNEL and channel == TEST_CHANNEL:
+        raw = (message.get("text") or "").strip()
+        if not message.get("bot_id") and not subtype and raw.lower().replace(" ", "").startswith("test:"):
+            query = raw.split(":", 1)[1].strip()
+            ts = message.get("ts", "")
+            if query:
+                results = doc_request.detect_document_requests(query)
+                if not results:
+                    client.chat_postMessage(
+                        channel=channel, thread_ts=ts,
+                        text=f"🧪 *테스트* — '{query}': 감지된 문서 요청이 없습니다.")
+                else:
+                    for di in results:
+                        hf = (not di.get("is_group")) and doc_request.has_local_file(di)
+                        client.chat_postMessage(
+                            channel=channel, thread_ts=ts,
+                            text=f"🧪 *테스트 결과* — `{query}`\n\n{doc_request.build_reply(di, has_file=hf)}")
+            return
 
     # 자료실 신규 문서 알림 채널 → bot_message 도 트리거로 사용 ────────────────────
     if channel == REFRESH_TRIGGER_CHANNEL:
