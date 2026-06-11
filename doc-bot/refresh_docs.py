@@ -189,14 +189,15 @@ def is_external_url(url: str) -> bool:
     return any(h in host for h in external_hosts)
 
 
-def _update_existing_meta(doc: dict, doc_name: str, raw_name: str, notion_url: str) -> None:
+def _update_existing_meta(doc: dict, doc_name: str, raw_name: str, notion_url: str, description: str = "") -> None:
     """기존 documents.json 항목의 제목·설명·alias·notion_url 을 Notion 최신값으로 갱신.
 
     담당자가 Notion에서 문서 제목을 바꾸면 표시 이름까지 따라가도록 한다.
     기존 alias 는 보존하고 새 alias 만 병합 → 옛 제목 검색도 계속 동작.
+    description 은 Notion '설명' 속성(없으면 doc_name) — v1/v2 구분 등 표시용.
     """
     doc["name"] = doc_name
-    doc["description"] = doc_name
+    doc["description"] = description or doc_name
     doc["notion_url"] = notion_url
     existing_aliases = doc.get("aliases", [])
     new_aliases = make_aliases(raw_name)
@@ -248,6 +249,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             continue
 
         doc_name = strip_ext(strip_prefix(raw_name))  # 표시용 이름 (접두사·확장자 제거)
+        desc = get_prop_text(props, "설명")  # Notion '설명' → description (v1/v2 구분 등)
 
         # URL 속성 확인
         url_prop = get_url_prop(props)
@@ -271,7 +273,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
                     "notion_url": notion_url,
                     "notion_page_id": page_id,
                     "local_file": "",
-                    "description": doc_name,
+                    "description": desc or doc_name,
                 }
                 if url_prop:
                     new_doc["direct_url"] = url_prop
@@ -280,7 +282,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
                 added += 1
             else:
                 idx = existing_ids[page_id]
-                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
+                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url, desc)
                 if url_prop:
                     documents[idx]["direct_url"] = url_prop
             skipped += 1
@@ -306,7 +308,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             if page_id in existing_ids:
                 idx = existing_ids[page_id]
                 _remove_stale_files(documents[idx], set())
-                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
+                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url, desc)
                 documents[idx]["local_file"] = ""
                 documents[idx]["local_files"] = []
                 ext_url = url_prop or next((u for _, u in all_files if u), "") or notion_url
@@ -329,7 +331,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
                 "notion_page_id": page_id,
                 "local_file": primary_local,
                 "local_files": all_local_files,
-                "description": doc_name,
+                "description": desc or doc_name,
             }
             if direct_url:
                 new_doc["direct_url"] = direct_url
@@ -340,7 +342,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
         else:
             idx = existing_ids[page_id]
             _remove_stale_files(documents[idx], set(all_local_files))
-            _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
+            _update_existing_meta(documents[idx], doc_name, raw_name, notion_url, desc)
             documents[idx]["local_file"] = primary_local
             documents[idx]["local_files"] = all_local_files
             if direct_url:

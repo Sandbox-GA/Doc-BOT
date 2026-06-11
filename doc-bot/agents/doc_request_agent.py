@@ -426,7 +426,7 @@ def build_reply(doc_info: dict, has_file: bool = False) -> str:
         reply += "\n원화인지 외화인지 알려주시면 파일을 바로 보내드립니다!"
         return reply
 
-    desc = f" ({doc_info['description']})" if doc_info["description"] else ""
+    desc = f" ({doc_info['description']})" if doc_info["description"] and doc_info["description"] != doc_info["name"] else ""
     header = f"*📄 {doc_info['name']}{desc} 요청이 확인되었습니다.*\n\n"
     library_line = f"아래 자료실에서 확인하실 수 있습니다.\n👉 <{LIBRARY_URL}|🏠 샌드박스 문서 자료실>\n\n"
 

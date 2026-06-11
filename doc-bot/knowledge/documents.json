@@ -380,7 +380,7 @@
     "local_files": [
       "퇴직연금 중도인출 신청서.pdf"
     ],
-    "description": "퇴직연금 중도인출 신청서"
+    "description": "중간정산 시 사용"
   },
   {
     "name": "재택근무 보고 서식",
@@ -396,7 +396,7 @@
     "local_files": [
       "재택근무 보고 서식.xlsx"
     ],
-    "description": "재택근무 보고 서식"
+    "description": "재택근무 시 사용"
   },
   {
     "name": "2026 건강검진 시행 안내",
@@ -418,7 +418,7 @@
     "local_files": [
       "2026 건강검진 시행안내.pdf"
     ],
-    "description": "2026 건강검진 시행 안내"
+    "description": "건강검진 예약 시 참고"
   },
   {
     "name": "치과치료 확인서",
@@ -434,7 +434,7 @@
     "local_files": [
       "치과치료확인서.pdf"
     ],
-    "description": "치과치료 확인서"
+    "description": "단체보험 청구 시 사용"
   },
   {
     "name": "단체보험 청구서",
@@ -450,7 +450,7 @@
     "local_files": [
       "2025_Sandbox Network_보험금 청구서.pdf"
     ],
-    "description": "단체보험 청구서"
+    "description": "단체보험 청구 시 사용"
   },
   {
     "name": "보험금 청구방법_Mcare",
@@ -468,7 +468,7 @@
     "local_files": [
       "보험금청구 방법_Mcare어플.pdf"
     ],
-    "description": "보험금 청구방법_Mcare"
+    "description": "단체보험 청구 시 참고"
   },
   {
     "name": "퇴직급여 신청서",
@@ -484,7 +484,7 @@
     "local_files": [
       "퇴직연금_퇴직급여신청서(DC_기업형IRP)_20241031.pdf"
     ],
-    "description": "퇴직급여 신청서"
+    "description": "퇴사 시 사용"
   },
   {
     "name": "퇴직절차 확인서",
@@ -500,7 +500,7 @@
     "local_files": [
       "퇴직절차확인서_20251231.pdf"
     ],
-    "description": "퇴직절차 확인서"
+    "description": "퇴사 시 사용"
   },
   {
     "name": "단체보험 매뉴얼",
@@ -516,7 +516,7 @@
     "local_files": [
       "2025_Sandbox Network_단체보험 매뉴얼.pdf"
     ],
-    "description": "단체보험 매뉴얼"
+    "description": "단체보험 청구 시 참고"
   },
   {
     "name": "수령확인증",
@@ -561,7 +561,7 @@
     "local_files": [
       "[필독] 샌드박스네트워크 영입 안내서.pdf"
     ],
-    "description": "신규 영입 안내서"
+    "description": "크리에이터 웰컴레터 內 첨부파일"
   },
   {
     "name": "(영문) 사업자등록증",
@@ -741,7 +741,7 @@
     "notion_url": "https://app.notion.com/p/Confidential-2026-AD-Business-_2Q-pdf-33529436cbac802aa7a5f78a29b28fc2",
     "notion_page_id": "33529436cbac802aa7a5f78a29b28fc2",
     "local_file": "[Confidential] 2026 샌드박스네트워크 AD Business 소개서_2Q.pdf",
-    "description": "2026 샌드박스네트워크 AD Business 소개서_2Q",
+    "description": "AD Business 범용 사업 소개서",
     "local_files": [
       "[Confidential] 2026 샌드박스네트워크 AD Business 소개서_2Q.pdf"
     ],
@@ -775,7 +775,7 @@
     "notion_url": "https://app.notion.com/p/Confidential-2026-_June_v-1-pdf-33529436cbac806e99a7c345a7b87991",
     "notion_page_id": "33529436cbac806e99a7c345a7b87991",
     "local_file": "[Confidential] 2026 샌드박스네트워크 크리에이터 소개서_June_v.1.pdf",
-    "description": "2026 샌드박스네트워크 크리에이터 소개서_June_v.1",
+    "description": "AD Business 범용 크리에이터 소개서_단가 포함 버전",
     "local_files": [
       "[Confidential] 2026 샌드박스네트워크 크리에이터 소개서_June_v.1.pdf"
     ],
@@ -809,7 +809,7 @@
     "notion_url": "https://app.notion.com/p/Confidential-2026-_June_v-2-pdf-33529436cbac80d187f9c3b707fd4dc6",
     "notion_page_id": "33529436cbac80d187f9c3b707fd4dc6",
     "local_file": "[Confidential] 2026 샌드박스네트워크 크리에이터 소개서_June_v.2.pdf",
-    "description": "2026 샌드박스네트워크 크리에이터 소개서_June_v.2",
+    "description": "AD Business 범용 크리에이터 소개서_단가 제외 버전",
     "local_files": [
       "[Confidential] 2026 샌드박스네트워크 크리에이터 소개서_June_v.2.pdf"
     ],
@@ -838,7 +838,7 @@
     "notion_url": "https://app.notion.com/p/Confidential-2026-Gaming-AD-Solution-_2Q_v-1-pdf-33529436cbac801eb6b7daa6fd1c1248",
     "notion_page_id": "33529436cbac801eb6b7daa6fd1c1248",
     "local_file": "[Confidential] 2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.1.pdf",
-    "description": "2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.1",
+    "description": "AD Business 게이밍 크리에이터 소개서_단가 포함 버전",
     "local_files": [
       "[Confidential] 2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.1.pdf"
     ],
@@ -867,7 +867,7 @@
     "notion_url": "https://app.notion.com/p/Confidential-2026-Gaming-AD-Solution-_2Q_v-2-pdf-33529436cbac8002a4f5e82cbe9f16a5",
     "notion_page_id": "33529436cbac8002a4f5e82cbe9f16a5",
     "local_file": "[Confidential] 2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.2.pdf",
-    "description": "2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.2",
+    "description": "AD Business 게이밍 크리에이터 소개서_단가 제외 버전",
     "local_files": [
       "[Confidential] 2026 샌드박스네트워크 Gaming AD Solution 소개서_2Q_v.2.pdf"
     ],
@@ -1052,7 +1052,7 @@
     "notion_url": "https://app.notion.com/p/PR-31929436cbac80659a2ee4c63cefbdd0",
     "notion_page_id": "31929436cbac80659a2ee4c63cefbdd0",
     "local_file": "",
-    "description": "언론 PR 요청",
+    "description": "보도자료 요청 시 필독 사항",
     "direct_url": "https://sandboxinc.notion.site/brandpr2025?source=copy_link"
   },
   {
@@ -1066,7 +1066,7 @@
     "notion_url": "https://app.notion.com/p/31929436cbac80bb909bce718033d04e",
     "notion_page_id": "31929436cbac80bb909bce718033d04e",
     "local_file": "",
-    "description": "리스크 관리",
+    "description": "크리에이터 이슈 사항 발생 시 프로토콜",
     "direct_url": "https://drive.google.com/file/d/14Q-To1Tf6ifkZHmvfIvLakXGYPN3qUhA/view?usp=sharing"
   },
   {
@@ -1099,7 +1099,7 @@
     "notion_url": "https://app.notion.com/p/35929436cbac809ca2ccf2024427eb71",
     "notion_page_id": "35929436cbac809ca2ccf2024427eb71",
     "local_file": "",
-    "description": "구성원 제휴 혜택 안내",
+    "description": "구성원 제휴혜택 참고",
     "direct_url": "https://www.notion.so/sandboxinc/13d29436cbac81f69f3ef76d01e2a795?source=copy_link",
     "local_files": []
   },
