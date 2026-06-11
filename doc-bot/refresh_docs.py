@@ -110,6 +110,15 @@ def strip_prefix(name: str) -> str:
     return PREFIX_PATTERN.sub("", name).strip()
 
 
+def strip_ext(name: str) -> str:
+    """표시명 끝의 파일 확장자(.pdf 등) 제거. (local_file 명에는 적용하지 않음)"""
+    low = name.lower()
+    for ext in VALID_EXTENSIONS:
+        if low.endswith(ext):
+            return name[: -len(ext)].rstrip()
+    return name
+
+
 def make_aliases(name: str) -> list:
     """문서명으로 기본 aliases 자동 생성."""
     clean = strip_prefix(name)
@@ -180,6 +189,41 @@ def is_external_url(url: str) -> bool:
     return any(h in host for h in external_hosts)
 
 
+def _update_existing_meta(doc: dict, doc_name: str, raw_name: str, notion_url: str) -> None:
+    """기존 documents.json 항목의 제목·설명·alias·notion_url 을 Notion 최신값으로 갱신.
+
+    담당자가 Notion에서 문서 제목을 바꾸면 표시 이름까지 따라가도록 한다.
+    기존 alias 는 보존하고 새 alias 만 병합 → 옛 제목 검색도 계속 동작.
+    """
+    doc["name"] = doc_name
+    doc["description"] = doc_name
+    doc["notion_url"] = notion_url
+    existing_aliases = doc.get("aliases", [])
+    new_aliases = make_aliases(raw_name)
+    doc["aliases"] = list(dict.fromkeys(
+        existing_aliases + [a for a in new_aliases if a not in existing_aliases]
+    ))
+
+
+def _remove_stale_files(doc: dict, keep: set) -> None:
+    """문서의 기존 로컬 파일 중 새 목록(keep)에 없는 고아 파일 삭제.
+
+    제목/파일명이 바뀌어 로컬 파일명이 달라질 때 옛 파일이 남지 않도록 정리.
+    """
+    old = set(doc.get("local_files") or [])
+    lf = doc.get("local_file")
+    if lf:
+        old.add(lf)
+    for stale in old - keep:
+        path = FILES_DIR / stale
+        try:
+            if path.exists():
+                path.unlink()
+                print(f"  🧹 옛 파일 정리: {stale}")
+        except OSError as e:
+            print(f"  ⚠️ 옛 파일 정리 실패: {stale} — {e}")
+
+
 def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> tuple[int, int, int, int]:
     """단일 DB 동기화. (added, updated, skipped, failed) 반환."""
     print(f"\n[{db_label}] 조회 중...")
@@ -203,7 +247,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             skipped += 1
             continue
 
-        doc_name = strip_prefix(raw_name)  # 표시용 이름 (접두사 제거)
+        doc_name = strip_ext(strip_prefix(raw_name))  # 표시용 이름 (접두사·확장자 제거)
 
         # URL 속성 확인
         url_prop = get_url_prop(props)
@@ -236,7 +280,7 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
                 added += 1
             else:
                 idx = existing_ids[page_id]
-                documents[idx]["notion_url"] = notion_url
+                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
                 if url_prop:
                     documents[idx]["direct_url"] = url_prop
             skipped += 1
@@ -257,6 +301,18 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             valid_files.append((local_file, file_url))
 
         if not valid_files:
+            # 기존 문서의 첨부가 외부 링크(구글드라이브 등)/미지원 형식으로 교체된 경우
+            # → 옛 파일 정리 후 링크 전용으로 갱신 (신규 URL 전용 항목은 설계상 등록 안 함)
+            if page_id in existing_ids:
+                idx = existing_ids[page_id]
+                _remove_stale_files(documents[idx], set())
+                _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
+                documents[idx]["local_file"] = ""
+                documents[idx]["local_files"] = []
+                ext_url = url_prop or next((u for _, u in all_files if u), "") or notion_url
+                if ext_url:
+                    documents[idx]["direct_url"] = ext_url
+                print(f"  🔁 {doc_name}: 파일→링크 전환 반영")
             skipped += 1
             continue
 
@@ -283,14 +339,12 @@ def sync_db(db_id: str, db_label: str, documents: list, existing_ids: dict) -> t
             added += 1
         else:
             idx = existing_ids[page_id]
-            documents[idx]["notion_url"] = notion_url
+            _remove_stale_files(documents[idx], set(all_local_files))
+            _update_existing_meta(documents[idx], doc_name, raw_name, notion_url)
             documents[idx]["local_file"] = primary_local
             documents[idx]["local_files"] = all_local_files
             if direct_url:
                 documents[idx]["direct_url"] = direct_url
-            existing_aliases = documents[idx].get("aliases", [])
-            new_aliases = make_aliases(raw_name)
-            documents[idx]["aliases"] = list(dict.fromkeys(existing_aliases + [a for a in new_aliases if a not in existing_aliases]))
 
         # ── 파일 다운로드 ───────────────────────────────────────────
         for local_file, file_url in valid_files:

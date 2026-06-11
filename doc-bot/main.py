@@ -1,6 +1,6 @@
 # Sandbox Doc Bot - 문서 요청 자동 안내 봇
 #
-# 목적: Slack 샌드박스-문서자료실 채널에서 문서/서류 요청 키워드를 감지,
+# 목적: Slack 운영 채널(Acting Channel)에서 문서/서류 요청 키워드를 감지,
 #       Notion 자료실 링크 또는 로컬 파일을 스레드로 바로 전송.
 #
 # Claude API 없음 → 순수 키워드 매칭으로 작동 (빠르고 가벼움)
@@ -9,7 +9,7 @@
 # 전제 조건:
 #   1. api.slack.com/apps 에서 Doc Bot 앱 생성
 #   2. .env에 DOC_BOT_TOKEN, SLACK_SIGNING_SECRET 입력
-#   3. 샌드박스-문서자료실 채널에 봇 초대: /invite @Sandbox Doc Bot
+#   3. 운영 채널(Acting Channel)에 봇 초대: /invite @Sandbox Doc Bot
 #   4. python refresh_docs.py 실행 → 로컬 파일 캐시 생성 (선택)
 
 import logging
@@ -129,7 +129,7 @@ def handle_message(event, client, logger):
                    "channel_join", "channel_leave", "channel_topic"):
         return
 
-    # 샌드박스-문서자료실 채널만 이하 처리 ────────────────────────────────────────────────────
+    # 운영 채널(Acting Channel)만 이하 처리 ────────────────────────────────────────────────────
     if channel != DOC_CHANNEL:
         return
 
@@ -261,7 +261,7 @@ if __name__ == "__main__":
 
     print("=" * 50)
     print("Sandbox Doc Bot 시작")
-    print(f"  샌드박스-문서자료실 채널: {DOC_CHANNEL}")
+    print(f"  Acting Channel(운영): {DOC_CHANNEL}")
     print(f"  포트: {port}")
     print("  모드: HTTP / 키워드 감지 → 스레드 즉시 응답 + 파일 전송")
     print("=" * 50)

@@ -61,7 +61,81 @@ AMBIGUOUS_KEYWORDS: dict[str, dict] = {
         "label": "등록증",
         "hint": "예) 게임배급업자 등록증, 게임제작업자 등록증, 대중문화예술기획업 등록증",
     },
+    "소개서": {
+        "label": "소개서",
+        "hint": (
+            "예) 회사소개서, AD Business 소개서, 크리에이터 소개서,\n"
+            "Gaming AD Solution 소개서, SANDBOX STUDIOS 통합소개서"
+        ),
+    },
+    "확인서": {
+        "label": "확인서",
+        "hint": (
+            "예) 재직증명서, 경력증명서, 벤처기업확인서, 중소기업확인서,\n"
+            "직접생산확인서, 치과치료 확인서, 퇴직절차 확인서"
+        ),
+    },
+    "증명서": {
+        "label": "증명서",
+        "hint": "예) 재직증명서, 경력증명서, 법인등기부등본, 부가통신사업 신고증명서",
+    },
+    "신청서": {
+        "label": "신청서",
+        "hint": "예) 개인법인카드 신청서, 퇴직급여 신청서, 퇴직연금 중도인출 신청서",
+    },
+    "계약서": {
+        "label": "계약서",
+        "hint": (
+            "예) 표준계약서(자료실 보유), 근로·연봉계약서(HR),\n"
+            "용역계약서·NDA(Legal), 임대차계약서(GA)"
+        ),
+    },
 }
+
+# ─── 미보유 문서 → 담당 부서/담당자 라우팅 ──────────────────────────────────
+# 자료실에 없는 문서를 찾을 때 키워드로 담당 부서를 안내한다.
+# 담당자는 Notion '담당 부서'별 최다 담당자 기준(명확한 경우만).
+DEPT_CONTACT: dict[str, dict] = {
+    "Legal&Compliance": {"label": "Legal & Compliance(법무)", "owner": "송민승", "note": ""},
+    "FP":               {"label": "FP(Corp Dev)",            "owner": "조예슬", "note": ""},
+    "CFO":              {"label": "CFO 직속",                 "owner": "",       "note": "🔒 Confidential 문서입니다. CFO 직속으로 직접 문의해 주세요."},
+    "GA":               {"label": "GA(총무)",                 "owner": "이승훈", "note": ""},
+    "Finance":          {"label": "Finance(재무)",            "owner": "이진경", "note": ""},
+    "HR":               {"label": "HR(인사)",                 "owner": "김혜원", "note": "💡 급여·Flex 관련은 월급날 전 사전 확인 부탁드립니다."},
+    "Sandbox Studios":  {"label": "Sandbox Studios",          "owner": "",       "note": ""},
+    "AD Business":      {"label": "AD Business",              "owner": "김지은", "note": ""},
+}
+
+# 키워드(정규화: 소문자+공백제거) → 부서코드. 긴 키워드 우선 매칭.
+KEYWORD_TO_DEPT: dict[str, str] = {
+    "용역계약": "Legal&Compliance", "nda": "Legal&Compliance", "비밀유지": "Legal&Compliance",
+    "영업비밀": "Legal&Compliance", "출연동의서": "Legal&Compliance", "지식재산": "Legal&Compliance",
+    "초상권": "Legal&Compliance", "상표권": "Legal&Compliance", "부속합의서": "Legal&Compliance",
+    "정관": "FP", "주주명부": "FP",
+    "주주총회의사록": "CFO", "이사회의사록": "CFO", "의사록": "CFO",
+    "건축물대장": "GA", "회사전화번호": "GA", "사업장주소": "GA", "회사주소": "GA",
+    "출장": "GA", "임대차계약": "GA", "부동산계약": "GA", "사무실도면": "GA",
+    "좌석배치도": "GA", "주차등록": "GA", "주차권": "GA", "비품신청": "GA",
+    "명함신청": "GA", "출입증": "GA", "보안카드": "GA",
+    "견적서": "Finance", "세금계산서": "Finance", "전자계산서": "Finance",
+    "납세증명": "Finance", "납세사실증명": "Finance", "잔액증명": "Finance",
+    "부채증명": "Finance", "원천징수영수증": "Finance", "지급명세서": "Finance",
+    "부가세": "Finance", "매입매출": "Finance",
+    "근로계약": "HR", "연봉계약": "HR", "퇴직증명": "HR", "퇴직금정산": "HR",
+    "급여명세": "HR", "4대보험": "HR", "자격득실": "HR", "휴직신청": "HR",
+    "복직신청": "HR", "연차신청": "HR", "경위서": "HR", "시말서": "HR",
+    "촬영공문": "Sandbox Studios", "촬영협조": "Sandbox Studios", "장소섭외": "Sandbox Studios", "로케이션": "Sandbox Studios",
+    "광고제안서": "AD Business", "협찬제안서": "AD Business", "중간광고": "AD Business", "브랜디드": "AD Business",
+}
+
+
+def _match_department(lower_text: str) -> dict | None:
+    """미보유 문서 키워드 → 부서 정보(dict). 긴 키워드 우선. 없으면 None."""
+    for kw in sorted(KEYWORD_TO_DEPT, key=len, reverse=True):
+        if kw in lower_text:
+            return DEPT_CONTACT.get(KEYWORD_TO_DEPT[kw])
+    return None
+
 
 # ─── 인사/비문서 패턴 — not_found 응답 제외 ──────────────────────────────────
 _GREETING_PATTERNS = [
@@ -137,7 +211,12 @@ def detect_document_requests(text: str) -> list[dict]:
     if matched:
         return matched
 
-    # 2단계: 모호한 키워드 감지 → 상세 입력 요청
+    # 2단계: 미보유 문서 → 담당 부서/담당자 안내 (특정 문서 키워드 우선)
+    dept = _match_department(lower_text)
+    if dept:
+        return [{"name": "부서_안내", "query": text, **dept}]
+
+    # 3단계: 모호한 키워드 감지 → 상세 입력 요청
     for norm_key, info in AMBIGUOUS_KEYWORDS.items():
         if norm_key in lower_text:
             return [{
@@ -297,6 +376,20 @@ def upload_local_file(client, channel: str, thread_ts: str, doc_info: dict) -> b
 
 def build_reply(doc_info: dict, has_file: bool = False) -> str:
     """문서 안내 답변 텍스트 생성."""
+    if doc_info["name"] == "부서_안내":
+        q = doc_info.get("query", "")
+        label = doc_info.get("label", "담당 부서")
+        owner = doc_info.get("owner", "")
+        note = doc_info.get("note", "")
+        who = label + (f" ({owner} 담당)" if owner else "")
+        msg = (
+            f"*📁 '{q}' 관련 문서는 자료실에 없습니다.*\n\n"
+            f"담당: *{who}* 으로 문의해 주세요."
+        )
+        if note:
+            msg += f"\n{note}"
+        return msg
+
     if doc_info["name"] == "모호한_키워드":
         label = doc_info.get("label", "서류")
         hint = doc_info.get("hint", "")
